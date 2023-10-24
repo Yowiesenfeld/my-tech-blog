@@ -5,27 +5,24 @@ const {
     User,
     Comment
 } = require('../models');
-const withAuth = require('../utils/auth')
 
-router.get('/', withAuth, (req, res) => {
+// get all posts for homepage
+router.get('/', (req, res) => {
+    console.log('======================');
     Post.findAll({
-            where: {
-          
-                user_id: req.session.user_id
-            },
             attributes: [
                 'id',
                 'title',
                 'content',
                 'created_at'
-               
+                // , [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id)'), 'vote_count']
             ],
             order: [
                 ['created_at', 'DESC']
             ],
             // `include` is equivalent to JOIN statement
             include: [
-                // include the Comment model:
+                // include the Comment model here:
                 {
                     model: Comment,
                     attributes: ['id', 'comment_text', 'user_id', 'post_id', 'created_at'],
@@ -41,13 +38,13 @@ router.get('/', withAuth, (req, res) => {
             ]
         })
         .then(dbPostData => {
-            // serialize data before passing to template
             const posts = dbPostData.map(post => post.get({
                 plain: true
             }));
-            res.render('dashboard', {
+
+            res.render('homepage', {
                 posts,
-                loggedIn: true
+                loggedIn: req.session.loggedIn
             });
         })
         .catch(err => {
@@ -56,7 +53,8 @@ router.get('/', withAuth, (req, res) => {
         });
 });
 
-router.get('/edit/:id', withAuth, (req, res) => {
+// get single post
+router.get('/post/:id', (req, res) => {
     Post.findOne({
             where: {
                 id: req.params.id
@@ -66,13 +64,13 @@ router.get('/edit/:id', withAuth, (req, res) => {
                 'title',
                 'content',
                 'created_at'
-               
+
             ],
             order: [
                 ['created_at', 'DESC']
             ],
             include: [
-                // Comment model here:
+                // include the Comment model here:
                 {
                     model: Comment,
                     attributes: ['id', 'comment_text', 'user_id', 'post_id', 'created_at'],
@@ -99,15 +97,25 @@ router.get('/edit/:id', withAuth, (req, res) => {
                 plain: true
             });
 
-            res.render('edit-post', {
+            res.render('single-post', {
                 post,
-                loggedIn: req.session.loggedIn
-            })
+                // req.session.loggedIn
+                loggedIn: true
+            });
         })
         .catch(err => {
             console.log(err);
             res.status(500).json(err);
         });
-})
+});
+
+router.get('/login', (req, res) => {
+    if (req.session.loggedIn) {
+        res.redirect('/');
+        return;
+    }
+
+    res.render('login');
+});
 
 module.exports = router;
