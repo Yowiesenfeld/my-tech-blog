@@ -1,0 +1,50 @@
+<main class="edit-wrapper col-10 rounded bg-secondary my-4 mx-auto">
+    <form class="editForm row justify-content-center text-center">
+        <div class="my-3 col-10">
+            <label for="editTitle" class="form-label h4">Title</label>
+            <input type="text" class="form-control" id="editTitle" aria-describedby="editTitle" value="{{post.title}}">
+        </div>
+        <div class="mb-3 col-10">
+            <label for="editPostBody" class="form-label h4">Body</label>
+            <textarea class="form-control post-textarea" id="editPostBody">{{post.content}}</textarea>
+        </div>
+
+        <div class="col-10 mb-3 row justify-content-center">
+            <button type="click" class="btn btn-md btn-warning p-1 rounded col-1" id="back-btn">Back</button>
+            <button type="submit" class="btn btn-md btn-warning p-1 mx-3 rounded col-1">Update</button>
+            <button type="click" class="btn btn-md btn-warning p-1 rounded col-1" id="delete-btn">Delete</button>
+        </div>
+    </form>
+    <a class="link-light text-decoration-none comment-link" data-bs-toggle="collapse" href="#commentBody{{post.id}}"
+        role="button" aria-expanded="false" aria-controls="commentBody">
+        <div class="card-footer py-1 bg-secondary">
+            <small class="fw-bold"><i class="fas fa-caret-square-down"></i> Comments</small>
+        </div>
+    </a>
+    <div class="collapse justify-content-center" id="commentBody{{post.id}}">
+        {{#if post.comments}}
+        <div class="card-body overflow-auto comment-body p-0 col-10 rounded">
+            {{> comment post.comments}}
+        </div>
+        {{/if}}
+
+        {{#if loggedIn}}
+        <div class="card-body p-0 row mx-0 bg-secondary mx-auto col-10">
+            <form class="row comment-form justify-content-center mx-0">
+                <div class="mt-3 col-10 mb-3">
+                    <textarea class="form-control" placeholder="Leave a comment here" name="comment-body" id="commentText"></textarea>
+                </div>
+
+                <div class="mt-1 text-center">
+                    <button type="submit" class="btn btn-warning btn-sm col-6 mb-3 rounded">Submit</button>
+                </div>
+            </form>
+        </div>
+        {{/if}}
+    </div>
+</main>
+
+<script src="/javascript/back.js"></script>
+<script src="/javascript/update.js"></script>
+<script src="/javascript/delete.js"></script>
+<script src="/javascript/comment.js"></script>

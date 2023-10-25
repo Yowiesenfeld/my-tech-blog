@@ -1,0 +1,13 @@
+<ul class="mb-0 pt-2 bg-light rounded">
+    {{#each this}}
+    <div class="row col-12">
+        <div class="rounded-pill bg-warning ml-3 col-auto px-4 py-2 mb-2">
+            <li class="px-0 comment-font text-dark">
+                <p class="my-0 pb-1 comment-text-size">{{comment_text}}</p>
+                <p class="my-0 py-0 comment-name-size ">&ndash; {{user.username}}, {{format_date created_at}}</p>
+            </li>
+        </div>
+    </div>
+
+    {{/each}}
+</ul>

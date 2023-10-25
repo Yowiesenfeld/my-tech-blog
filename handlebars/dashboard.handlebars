@@ -1,0 +1,32 @@
+<main class="row mx-2 justify-content-center">
+    <div class="col-12 text-center h3 mt-2">Create New Post</div>
+    <div class="card mt-2 custom-box-shadow col-11 border-dark border-2">
+        <form class="newPostForm text-center">
+            <div class="my-3 col-10">
+                <label for="newPostTitle">Title</label>
+                <input type="text" class="form-control" id="newPostTitle">
+            </div>
+            <div class="mb-3 col-10">
+                <label for="newPostBody">Body</label>
+                <textarea class="form-control post-textarea" id="newPostBody"></textarea>
+            </div>
+            <div class="col-10 mb-3 row justify-content-center">
+                <button type="submit" class="btn btn-warning col-6">Post</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-12 text-center h3 mt-2">My Posts</div>
+
+    {{#each posts as |post|}}
+    <div class="card mt-2 custom-box-shadow col-11 border-dark border-2">
+        <a class="link-light text-decoration-none" href="/dashboard/edit/{{post.id}}">
+            <div class="card-header d-flex bg-dark" id="post_title">
+                <span class="h5 me-auto">{{post.title}}</span> <span>{{format_date post.created_at}}</span>
+            </div>
+        </a>
+    </div>
+    {{/each}}
+</main>
+
+<script src="/javascript/new-post.js"></script>
